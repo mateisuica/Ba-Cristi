@@ -1,4 +1,4 @@
-package com.example.mateisuica.cristiba;
+package com.example.korjikk.cristiba;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,41 +10,40 @@ import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        final EditText username = (EditText)findViewById(R.id.username);
-        final EditText password = (EditText)findViewById(R.id.password);
-        Button login = (Button)findViewById(R.id.loginButton);
+        final EditText username= (EditText)findViewById(R.id.username);
+        final EditText password= (EditText)findViewById(R.id.password);
+        final EditText repeatPassword= (EditText)findViewById(R.id.repeatPassword);
+        Button login= (Button)findViewById(R.id.registerButton);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*TODO
-                         X  citeasca username & password
-                         X  validare
-                         X dea mesaj de eroare in caz de esec
-                         ->> mearga la urmatorul ecran in caz de succes
-                */
+                /* TODO
+                       citesce username,password & repeated password
+                       valideaza ca pass=repeatPass si pass>4 caractere;
+                       da mesaj de eroare in caz de esec,
+                       else afiseaza mesaj de succes
+                 */
+                String usernameString=username.getText().toString();
+                String passwordString=password.getText().toString();
+                String repeatPasswordString=repeatPassword.getText().toString();
 
-                String usernameString = username.getText().toString();
-                String passwordString = password.getText().toString();
+                boolean usernameAndPasswordWereValidated= isValid(usernameString, passwordString, repeatPasswordString);
+                if(usernameAndPasswordWereValidated) {
+                    Toast.makeText(RegisterActivity.this, "Succes!", Toast.LENGTH_SHORT).show();
 
-                boolean usernameAndPasswordWereValidated = isValid(usernameString, passwordString);
-
-                if(usernameAndPasswordWereValidated == true) {
-                    Intent intent = new Intent(RegisterActivity.this, ContactsList.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Wrong username and/or password", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(RegisterActivity.this, "Password too short or does not match", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-    private boolean isValid(String user, String pass) {
-        return user.equals(pass);
+    private boolean isValid(String user, String pass,String repeatPass) {
+        return (pass.equals(repeatPass) && pass.length()>3);
     }
 }
