@@ -1,12 +1,18 @@
 package com.example.mateisuica.cristiba;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,17 +28,25 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String usernameString = username.getText().toString();
-                String passwordString = password.getText().toString();
+                 final String usernameString = username.getText().toString().trim();
+                 final String passwordString = password.getText().toString().trim();
 
-                boolean usernameAndPasswordWereValidated = isValid(usernameString, passwordString);
+                Backendless.UserService.login(usernameString,
+                        passwordString,
+                        new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser response) {
+                                Intent intent = new Intent(LoginActivity.this, ContactsList.class);
+                                startActivity(intent);
+                                finish();
+                            }
 
-                if(usernameAndPasswordWereValidated == true) {
-                    Intent intent = new Intent(LoginActivity.this, ContactsList.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Wrong username and/or password", Toast.LENGTH_SHORT).show();
-                }
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(LoginActivity.this, "Login failed: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("LOGIN", "login failed for " + usernameString);
+                            }
+                        });
             }
         });
     }
