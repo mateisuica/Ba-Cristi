@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class ContactAdapter extends ArrayAdapter {
 
-    private List<String> names;
+    private List<Contact> names;
 
     public ContactAdapter(Context context, int resource, List objects) {
         super(context, resource, objects);
@@ -28,7 +27,7 @@ public class ContactAdapter extends ArrayAdapter {
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rootView = vi.inflate(R.layout.contact_row, parent, false);
         TextView name = (TextView)rootView.findViewById(R.id.contactName);
-        name.setText(names.get(position));
+        name.setText(names.get(position).getSecondPerson());
 
         return rootView;
     }

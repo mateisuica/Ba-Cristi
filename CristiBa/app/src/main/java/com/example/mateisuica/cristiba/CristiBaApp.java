@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.backendless.Backendless;
+import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
@@ -12,6 +13,8 @@ import com.backendless.exceptions.BackendlessFault;
  */
 public class CristiBaApp extends Application {
 
+    public static String token = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -19,6 +22,18 @@ public class CristiBaApp extends Application {
         Backendless.Messaging.registerDevice("385203128016", new AsyncCallback<Void>() {
             @Override
             public void handleResponse(Void response) {
+                Backendless.Messaging.getDeviceRegistration( new AsyncCallback<DeviceRegistration>() {
+
+                    @Override
+                    public void handleResponse(DeviceRegistration response) {
+                      token = response.getDeviceId();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+
+                    }
+                });
                 Log.d("Backendless", "Device registered");
             }
 
