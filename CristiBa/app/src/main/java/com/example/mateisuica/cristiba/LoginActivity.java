@@ -3,10 +3,16 @@ package com.example.mateisuica.cristiba;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -22,22 +28,27 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String usernameString = username.getText().toString();
-                String passwordString = password.getText().toString();
+                String usernameString = username.getText().toString().trim();
+                String passwordString = password.getText().toString().trim();
 
-                boolean usernameAndPasswordWereValidated = isValid(usernameString, passwordString);
+                Backendless.UserService.login( usernameString, passwordString, new AsyncCallback<BackendlessUser>()
+                {
+                    public void handleResponse( BackendlessUser user )
+                    {
+                        // user has been logged in
+                        Intent intent = new Intent(LoginActivity.this, ContactsList.class);
+                        startActivity(intent);
+                    }
 
-                if(usernameAndPasswordWereValidated == true) {
-                    Intent intent = new Intent(LoginActivity.this, ContactsList.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Wrong username and/or password", Toast.LENGTH_SHORT).show();
-                }
+                    public void handleFault( BackendlessFault fault )
+                    {
+                        Toast.makeText(LoginActivity.this, "Wrong username and/or password", Toast.LENGTH_SHORT).show();
+                        Log.e("LOGIN", fault.getMessage());
+                        // login failed, to get the error code call fault.getCode()
+                    }
+                });
+
             }
         });
-    }
-
-    private boolean isValid(String user, String pass) {
-        return user.equals(pass);
     }
 }
