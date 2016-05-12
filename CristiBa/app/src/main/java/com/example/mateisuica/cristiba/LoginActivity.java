@@ -35,6 +35,18 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     public void handleResponse( BackendlessUser user )
                     {
+                        user.setProperty("gcmToken", CristiApp.token);
+                        Backendless.UserService.update(user, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser response) {
+
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+
+                            }
+                        });
                         // user has been logged in
                         Intent intent = new Intent(LoginActivity.this, ContactsList.class);
                         startActivity(intent);
