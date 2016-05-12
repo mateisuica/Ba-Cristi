@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -29,30 +30,13 @@ import java.util.List;
 public class ContactsList extends AppCompatActivity {
 
     private List<Contact> mList;
+    private ListView contacts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-        final ListView contacts = (ListView) findViewById(R.id.contactsList);
-
-        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-
-        String whereClause = "firstPerson = '" + currentUser.getEmail() + "'";
-        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        dataQuery.setWhereClause(whereClause);
-        Backendless.Persistence.of(Contact.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Contact>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<Contact> response) {
-                mList = response.getData();
-                contacts.setAdapter(new ContactAdapter(ContactsList.this, R.layout.contact_row, response.getData()));
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-
-            }
-        });
-
+        contacts = (ListView) findViewById(R.id.contactsList);
 
         contacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,21 +54,55 @@ public class ContactsList extends AppCompatActivity {
                         deliveryOptions.addPushSinglecast( (String)user.getProperty("gcmToken") );
 
                         PublishOptions publishOptions = new PublishOptions();
-                        publishOptions.putHeader( "android-ticker-text", "You just got a push notification!" );
-                        publishOptions.putHeader( "android-content-title", "This is a notification title" );
-                        publishOptions.putHeader( "android-content-text", "Push Notifications are cool" );
+                        publishOptions.putHeader( "android-ticker-text", "Ba, Cristi!" );
+                        publishOptions.putHeader( "android-content-title", "Cheama-l ba pe Cristi, ba!" );
+                        publishOptions.putHeader( "android-content-text",  user.getEmail() + ", te cheama! Baaa, Cristii!" );
 
-                        MessageStatus status = Backendless.Messaging.publish( "Hi Devices!", publishOptions, deliveryOptions );
+                        Backendless.Messaging.publish("Cristiii!", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+                            @Override
+                            public void handleResponse(MessageStatus response) {
+                                Toast.makeText(ContactsList.this, "L-am chemat pe Cristi!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                Toast.makeText(ContactsList.this, "Cristi nu-i acasa!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     }
 
                     @Override
                     public void handleFault(BackendlessFault fault) {
-
+                        Toast.makeText(ContactsList.this, "Cristi nu-i acasa!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+
+        String whereClause = "firstPerson = '" + currentUser.getEmail() + "'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+        Backendless.Persistence.of(Contact.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Contact>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Contact> response) {
+                mList = response.getData();
+                contacts.setAdapter(new ContactAdapter(ContactsList.this, R.layout.contact_row, response.getData()));
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(ContactsList.this, "Niciun Cristi nu-i acasa!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

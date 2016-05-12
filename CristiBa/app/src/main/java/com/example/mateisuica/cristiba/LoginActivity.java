@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     public void handleFault( BackendlessFault fault )
                     {
-                        Toast.makeText(LoginActivity.this, "Wrong username and/or password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Ai gresit parola jupane!", Toast.LENGTH_SHORT).show();
                         Log.e("LOGIN", fault.getMessage());
                         // login failed, to get the error code call fault.getCode()
                     }
