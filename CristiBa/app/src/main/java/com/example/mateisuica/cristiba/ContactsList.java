@@ -12,6 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,32 +28,29 @@ public class ContactsList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
+        final ListView contacts = (ListView) findViewById(R.id.contactsList);
 
-        List<String> list = new ArrayList<>();
-        list.add("Roxana");
-        list.add("Ioana");
-        list.add("Ionela");
-        list.add("Matei");
-        list.add("Andrei");
-        list.add("Ion");
-        list.add("Gigi");
-        list.add("Becali");
-        list.add("Zoli");
-        list.add("Dior");
-        list.add("Andrei");
-        list.add("Gigi");
-        list.add("Becali");
-        list.add("Zoli");
-        list.add("Dior");
-        list.add("Andrei");
-        list.add("Ion");
-        list.add("Gigi");
-        list.add("Becali");
-        list.add("Zoli");
-        list.add("Dior");
+        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
 
-        ListView contacts = (ListView) findViewById(R.id.contactsList);
-        contacts.setAdapter(new ContactAdapter(ContactsList.this, R.layout.contact_row, list));
+        String whereClause = "firstPerson = '" + currentUser.getEmail() + "'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause( whereClause );
+        Backendless.Persistence.of( Contact.class ).find(dataQuery, new AsyncCallback<BackendlessCollection<Contact>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Contact> response) {
+                contacts.setAdapter(new ContactAdapter(ContactsList.this, R.layout.contact_row, response.getData()));
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
+
+
+
+
+
         contacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

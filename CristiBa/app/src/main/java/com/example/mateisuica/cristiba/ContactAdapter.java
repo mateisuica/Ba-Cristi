@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class ContactAdapter extends ArrayAdapter {
 
-    private List<String> names;
+    private List<Contact> names;
 
-    public ContactAdapter(Context context, int resource, List objects) {
+    public ContactAdapter(Context context, int resource, List<Contact> objects) {
         super(context, resource, objects);
         names = objects;
 
@@ -28,7 +28,8 @@ public class ContactAdapter extends ArrayAdapter {
         LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rootView = vi.inflate(R.layout.contact_row, parent, false);
         TextView name = (TextView)rootView.findViewById(R.id.contactName);
-        name.setText(names.get(position));
+        Contact contact = names.get(position);
+        name.setText(contact.getSecondPerson());
 
         return rootView;
     }
