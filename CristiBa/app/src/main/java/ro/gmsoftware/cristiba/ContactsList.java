@@ -1,7 +1,6 @@
-package com.example.mateisuica.cristiba;
+package ro.gmsoftware.cristiba;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -21,10 +19,8 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
-import com.backendless.messaging.PushBroadcastMask;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsList extends AppCompatActivity {

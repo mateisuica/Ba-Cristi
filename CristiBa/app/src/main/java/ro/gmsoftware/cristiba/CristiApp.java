@@ -1,4 +1,4 @@
-package com.example.mateisuica.cristiba;
+package ro.gmsoftware.cristiba;
 
 import android.app.Application;
 import android.util.Log;
@@ -22,7 +22,7 @@ public class CristiApp extends Application {
         Backendless.Messaging.getDeviceRegistration(new AsyncCallback<DeviceRegistration>() {
             @Override
             public void handleResponse(DeviceRegistration response) {
-                token = response.getDeviceToken();
+                token = response.getDeviceId();
                 Log.d("TOKEN", token);
             }
 

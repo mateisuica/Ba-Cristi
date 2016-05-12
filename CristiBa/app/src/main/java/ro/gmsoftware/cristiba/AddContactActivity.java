@@ -1,4 +1,4 @@
-package com.example.mateisuica.cristiba;
+package ro.gmsoftware.cristiba;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +13,6 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.DeliveryOptions;
-import com.backendless.messaging.MessageStatus;
-import com.backendless.messaging.PublishOptions;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class AddContactActivity extends AppCompatActivity {

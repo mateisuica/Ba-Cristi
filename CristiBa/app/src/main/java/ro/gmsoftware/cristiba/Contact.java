@@ -1,4 +1,4 @@
-package com.example.mateisuica.cristiba;
+package ro.gmsoftware.cristiba;
 
 /**
  * Created by Matei on 5/12/2016.

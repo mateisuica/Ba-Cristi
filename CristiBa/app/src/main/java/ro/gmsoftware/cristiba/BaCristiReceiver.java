@@ -1,4 +1,4 @@
-package com.example.mateisuica.cristiba;
+package ro.gmsoftware.cristiba;
 
 import android.content.Context;
 import android.content.Intent;

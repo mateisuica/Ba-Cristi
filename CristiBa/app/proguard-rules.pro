@@ -15,3 +15,15 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+-dontwarn com.backendless.**
+-dontwarn weborb.**
+-dontwarn java.nio.** {*;}
+-dontwarn javax.** {*;}
+
+-keep class weborb.** {*;}
+
+-keep class com.backendless.** {*;}
+-keep class java.nio.** {*;}
+-keep class javax.** {*;}
